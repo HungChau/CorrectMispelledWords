@@ -97,6 +97,8 @@ def writeOutput(dict, raw, outputFileName):
                         if minDistance == 1:
                             break
                 f.write(spelledWord + " "+ str(minDistance)+"\n")
+            else:
+                f.write(source + " 0\n")
 
             count +=1
             if count % 5 == 0:
