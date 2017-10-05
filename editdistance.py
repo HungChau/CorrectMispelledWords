@@ -21,8 +21,7 @@ def MIN(a, b, c):
         return b
     return c
 
-def LevenshteinDistance(source, target):
-    distance = 0
+def LevenshteinDistance(source, target, currentDistance):
     n = len(target)
     m = len(source)
 
@@ -31,13 +30,19 @@ def LevenshteinDistance(source, target):
         distanceMatrix[i][0] = distanceMatrix[i-1][0] + 1
     for j in range(1, m+1):
         distanceMatrix[0][j] = distanceMatrix[0][j-1] + 1
+    min = 50
     for i in range(1, n+1):
+        min = distanceMatrix[i][0]
         for j in range(1, m+1):
             if source[j-1] == target[i-1]:
                 sub_cost = 0
             else:
                 sub_cost = 1
             distanceMatrix[i][j] = MIN(distanceMatrix[i-1][j]+1, distanceMatrix[i][j-1]+1, distanceMatrix[i-1][j-1]+ sub_cost)
+            if distanceMatrix[i][j] < min:
+                min = distanceMatrix[i][j]
+        if min > currentDistance:
+            return currentDistance
     # print(distanceMatrix)
 
     return distanceMatrix[n][m]
@@ -67,7 +72,7 @@ def LevenshteinDistanceImproved(source, target, currentDistance):
             v1[j+1] = MIN(v1[j] + 1, v0[j+1] +1, v0[j] + sub_cost)
             if v1[j+1] < min:
                 min = v1[j+1]
-        if currentDistance <= min:
+        if min > currentDistance:
             return currentDistance
         v2 = v0
         v0 = v1
@@ -85,12 +90,9 @@ def writeOutput(dict, raw, outputFileName):
                 spelledWord = ""
                 minDistance = 100
 
-                #initialize variables here save time
-
-
                 for target in dict:
-                    distance = LevenshteinDistanceImproved(source, target, minDistance)
-                    # distance = LevenshteinDistance(source, target)
+                    # distance = LevenshteinDistanceImproved(source, target, minDistance)
+                    distance = LevenshteinDistance(source, target,minDistance)
                     if distance < minDistance:
                         spelledWord = target
                         minDistance = distance
