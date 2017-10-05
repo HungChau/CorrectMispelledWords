@@ -27,18 +27,47 @@ def LevenshteinDistance(source, target, currentDistance):
 
     distanceMatrix = [[0] * (m+1) for i in range(n+1)]
     for i in range(1,n+1):
-        distanceMatrix[i][0] = distanceMatrix[i-1][0] + 1
+        distanceMatrix[i][0] = i
     for j in range(1, m+1):
-        distanceMatrix[0][j] = distanceMatrix[0][j-1] + 1
+        distanceMatrix[0][j] = j
     min = 50
-    for i in range(1, n+1):
-        min = distanceMatrix[i][0]
-        for j in range(1, m+1):
+    for j in range(1, m + 1):
+        min = j
+        for i in range(1, n + 1):
             if source[j-1] == target[i-1]:
                 sub_cost = 0
             else:
                 sub_cost = 1
             distanceMatrix[i][j] = MIN(distanceMatrix[i-1][j]+1, distanceMatrix[i][j-1]+1, distanceMatrix[i-1][j-1]+ sub_cost)
+            if distanceMatrix[i][j] < min:
+                min = distanceMatrix[i][j]
+        if min > currentDistance:
+            return currentDistance
+    # print(distanceMatrix)
+
+    return distanceMatrix[n][m]
+
+def OSA_Distance(source, target, currentDistance):
+    n = len(target)
+    m = len(source)
+
+    distanceMatrix = [[0] * (m + 1) for i in range(n + 1)]
+    for i in range(1, n + 1):
+        distanceMatrix[i][0] = i
+    for j in range(1, m + 1):
+        distanceMatrix[0][j] = j
+    min = 50
+    for i in range(1, n + 1):
+        min = distanceMatrix[i][0]
+        for j in range(1, m + 1):
+            if source[j - 1] == target[i - 1]:
+                sub_cost = 0
+            else:
+                sub_cost = 1
+            distanceMatrix[i][j] = MIN(distanceMatrix[i - 1][j] + 1, distanceMatrix[i][j - 1] + 1,
+                                       distanceMatrix[i - 1][j - 1] + sub_cost)
+            #the difference from the algorithm for Levenshtein distance is the additionof one recurrence
+            # if i > 1 and j > 1 and
             if distanceMatrix[i][j] < min:
                 min = distanceMatrix[i][j]
         if min > currentDistance:
@@ -99,14 +128,16 @@ def writeOutput(dict, raw, outputFileName):
                         if minDistance == 1:
                             break
                 f.write(spelledWord + " "+ str(minDistance)+"\n")
-            else:
-                f.write(source + " 0\n")
+            # else:
+            #     f.write(source + " 0\n")
 
             count +=1
             if count % 5 == 0:
                 print(count)
                 end = default_timer()
-                print("Running time: ", (end - start)/60)
+                print("time: ", (end - start)/60)
+    end = default_timer()
+    print("Running time: ", (end - start) / 60)
 
 def task1():
     # start = default_timer()

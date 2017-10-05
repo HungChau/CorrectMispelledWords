@@ -1,15 +1,6 @@
-blavatnik 0
-rentan 0
 landring 1
-ennis 0
-imitado 0
 bidzina 1
 acuarteladas 2
 doble 2
 somos 3
 orthoflow 1
-entrampa 0
-sumarla 1
-reverenciado 0
-aglutinado 1
-demuele 1
